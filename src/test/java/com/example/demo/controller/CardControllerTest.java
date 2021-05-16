@@ -7,6 +7,7 @@ import com.example.demo.repository.PersonRepository;
 import com.example.demo.service.CardService;
 import com.example.demo.service.PersonService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -73,7 +74,19 @@ class CardControllerTest {
         Assertions.assertEquals(date, card.getDate());
         Assertions.assertEquals(code, card.getCode());
         Assertions.assertEquals(type, card.getType());
+    }
 
+    @Test
+    void get() {
+        webTestClient.get()
+                .uri("/card/1")
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(Card.class)
+                .consumeWith(cardEntityExchangeResult -> {
+                    var card = cardEntityExchangeResult.getResponseBody();
+                    assert card != null;
+                });
     }
 
 
